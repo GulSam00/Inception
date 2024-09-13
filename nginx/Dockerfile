@@ -1,0 +1,19 @@
+FROM debian:bullseye
+
+RUN apt-get -y update && \
+    apt-get -y upgrade && \ 
+    apt-get install -y nginx && \
+    apt-get install -y openssl && \
+    service nginx start
+
+RUN mkdir -p /etc/nginx/ssl
+
+RUN openssl req -x509 -sha256 -nodes \
+    -days 700 -newkey rsa:4096 \
+    -out /etc/nginx/ssl/victofer.crt \
+    -keyout /etc/nginx/ssl/victofer.key \
+    -subj "/C=ES/ST=Espanya/L=Malaga/O=42 School/OU=victofer/CN=victofer.42.fr"
+
+
+
+CMD ["nginx", "-g", "daemon off;"]
