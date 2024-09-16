@@ -1,67 +1,37 @@
-version: '3.7'
-
-# this command `docker system prune` will remove all the volumes and images
-
-
-services:
-  #mariadb
-  mariadb:
-    image: mariadb
-    container_name: mariadb
-    build: ./requirements/mariadb
-    volumes:
-      - mariadb:/var/lib/mysql
-    env_file :
-    - .env
-    networks :
-    - inception
-    restart: always
-#nginx
-  nginx:
-    image: nginx
-    container_name: nginx
-    build: ./requirements/nginx
-    ports:
-      - "443:443"
-    depends_on:
-      - wordpress
-    volumes:
-      - wordpress:/var/www/wordpress
-    networks:
-      - inception
-    restart: always
-
-#wordpress
-  wordpress:
-    image: wordpress
-    container_name: wordpress
-    build: ./requirements/wordpress
-    depends_on:
-      - mariadb
-    volumes:
-      - wordpress:/var/www/wordpress
-    env_file :
-      - .env
-    networks:
-      - inception
-    restart: always
-
-
 volumes:
-  mariadb:
-   driver: local
-   driver_opts:
-      device: $HOME/data/mariadb
-      type : none
-      o : bind
-
-  wordpress:
-    driver: local
-    driver_opts:
-      device: $HOME/data/wordpress
-      type : none
-      o : bind
-
+    data: {}
+services:
+    mariadb:
+        image: debian:buster
+        init: true
+        restart: always
+        expose:
+            - "3306"
+        networks:
+            - intra
+        tty: true
+    nginx:
+        image: debian:buster
+        init: true
+        restart: always
+        ports:
+            - "443:443"
+        volumes:
+            - data:/var/www/html
+        networks:
+            - intra
+        tty: true
+    wordpress:
+        image: debian:buster
+        init: true
+        restart: always
+        volumes:
+            - data:/var/www/html
+        expose: 
+            - "9000"
+        networks:
+            - intra
+        tty: true
 networks:
-  inception:
-   name: inception
+    intra:
+        driver: bridge
