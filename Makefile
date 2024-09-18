@@ -7,4 +7,7 @@ up:
 down:
 	docker-compose -f ./srcs/docker-compose.yaml down -v
 
-.PHONY : all up down
+fclean:
+	docker system prune -af --volumes
+
+.PHONY : all up down fclean
