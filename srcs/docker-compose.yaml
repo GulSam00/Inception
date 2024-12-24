@@ -49,20 +49,52 @@ services:
     networks:
       - inception_network
 
+  website:
+    container_name: website
+    build: requirements/bonus/website/
+    image: website
+    networks:
+      - inception_network
+    ports:
+      - "7777:7777"
+    restart: always
+
+  backup:
+    container_name: backup
+    build: requirements/bonus/backup/
+    image: backup
+    networks:
+      - inception_network
+    depends_on:
+      - mariadb
+    volumes:
+      - db_volume:/db_volume
+      - backup_db_volume:/backup
+    restart: always
+    env_file:
+      - .env
+
+
 volumes:
   db_volume:
     driver: local
     driver_opts:
       type: volume
-      device: $HOME/data/mariadb
+      device: /home/sham/data/mariadb
       o: bind
 
   wp_volume:
     driver: local
     driver_opts:
       type: volume
-      device: $HOME/data/wordpress
+      device: /home/sham/data/wordpress
       o: bind
+  backup_db_volume:
+    driver_opts:
+      type: volume
+      device: /home/sham/data/backupMariadb
+      o: bind
+
 
 networks:
   inception_network:
