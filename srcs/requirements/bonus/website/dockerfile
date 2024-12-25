@@ -1,6 +1,5 @@
 FROM debian:buster
 
-# Update System and Install Tools
 RUN apt-get update -y
 RUN apt-get -y install nodejs npm
 

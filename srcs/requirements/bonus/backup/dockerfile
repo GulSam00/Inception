@@ -1,12 +1,9 @@
 FROM debian:buster
 
-# Update System and Install Tools
 RUN apt-get update -y
 
-# Create a backup Folder
 RUN mkdir /backup
 
-# ADD ./tools/run.sh to container
 ADD ./tools/run.sh /usr/bin/run.sh
 RUN chmod +x /usr/bin/run.sh
 

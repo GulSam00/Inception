@@ -4,7 +4,7 @@ echo "backup database every 5 minutes"
 
 while true;
 do
-	time=$(date '+%Y-%m-%d %H:%M:%S')
+    time=$(TZ="Asia/Seoul" date '+%Y-%m-%d %H:%M:%S')
 	
 	backup_folder="backup_${time}"
 	mkdir "/backup/$backup_folder"
