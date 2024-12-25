@@ -12,5 +12,6 @@ fclean:
 	docker system prune -af --volumes
 	sudo rm -rf /home/sham/data/mariadb/*
 	sudo rm -rf /home/sham/data/wordpress/*
+	sudo rm -rf /home/sham/data/backupMariadb/*
 
 .PHONY : all up down fclean
